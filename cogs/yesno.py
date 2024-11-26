@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import random
 from utils import log_command
+import logging
 
 
 class YesNoCog(commands.Cog):
@@ -11,7 +12,7 @@ class YesNoCog(commands.Cog):
     @commands.command(name="yesno")
     async def yesno(self, ctx, *, text: str):
         """
-        Commande : !yesno <texte>
+        Command: !yesno <text>
         """
         choice = random.choice(["YES", "NO"])
         emojis_yes = ["\U0001F1FE", "\U0001F1EA", "\U0001F1F8"]  # Y E S
@@ -23,8 +24,8 @@ class YesNoCog(commands.Cog):
             for emoji in reactions:
                 await message.add_reaction(emoji)
         except discord.errors.HTTPException as e:
-            await print("Erreur lors de l'ajout des réactions. Vérifiez que les emojis sont corrects.")
-            print(f"Erreur : {e}")
+            logging.error("Erorr when adding reactions. PLease verify that emojis are correct.")
+            logging.error(f"Error : {e}")
         log_command(ctx, choice)
 
 

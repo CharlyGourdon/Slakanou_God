@@ -1,24 +1,31 @@
 import discord
 from discord.ext import commands
 from utils import get_token, load_all_cogs
+import logging
 
 
-# Configurer les intents requis
+logging.basicConfig(format='%(asctime)s -- %(message)s',
+                    datefmt='%m/%d/%Y %I:%M:%S %p',
+                    encoding='utf-8',
+                    level=logging.INFO)
+
+
+# Configure required intent
 intents = discord.Intents.default()
 intents.message_content = True
 
-# Création du bot avec un préfixe pour les commandes et les intents
+# Create bot with "!" prefix for commands and intents
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 
 @bot.event
 async def on_ready():
     """
-    Événement : lorsque le bot est prêt
+    Event: when bot is ready
     """
-    # Charger les cogs au démarrage du bot
+    # Load cogs at bot booting
     await load_all_cogs(bot)
-    print(f"{bot.user} est connecté et prêt à l'emploi !")
+    logging.info(f"{bot.user} connected and ready to use!")
 
 # Démarrer le bot
 bot.run(get_token())
