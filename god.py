@@ -15,7 +15,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 # Create bot with "!" prefix for commands and intents
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 
 
 @bot.event

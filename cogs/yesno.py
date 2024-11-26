@@ -9,7 +9,7 @@ class YesNoCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="yesno")
+    @commands.command(name="yesno", help="Réagit au message avec Yes ou NO.")
     async def yesno(self, ctx, *, text: str):
         """
         Command: !yesno <text>
@@ -24,9 +24,15 @@ class YesNoCog(commands.Cog):
             for emoji in reactions:
                 await message.add_reaction(emoji)
         except discord.errors.HTTPException as e:
-            logging.error("Erorr when adding reactions. PLease verify that emojis are correct.")
+            logging.error(
+                "Error when adding reactions. PLease verify that emojis are correct.")
             logging.error(f"Error : {e}")
         log_command(ctx, choice)
+
+    @yesno.error
+    async def yesno_error(ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Vous devez entrer un message (ex : `!yesno <message>`).")
 
 
 async def setup(bot):

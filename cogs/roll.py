@@ -7,13 +7,13 @@ class RollCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="roll")
+    @commands.command(name="roll", help="Lance un dé au format XdY (ex : 1d20 pour un dé à 20 faces).")
     async def roll(self, ctx, dice: str):
         """
-        Roll dices to format NdM (N = number of dices, M = number of sides).
+        Roll dices to format XdY (X = number of dices, Y = number of sides).
         """
         try:
-            # split of NdM format
+            # split of XdY format
             num_dice, num_faces = map(int, dice.lower().split('d'))
             if num_dice <= 0 or num_faces <= 0:
                 raise ValueError
@@ -25,8 +25,15 @@ class RollCog(commands.Cog):
             # Send results
             await ctx.send(f"🎲 Résultat : {rolls} (Total : {total})")
         except ValueError:
-            await ctx.send("Format invalide ! Utilise `!roll NdM`, où N est le nombre de dés et M le nombre de faces.")
+            await ctx.send("Format invalide ! Utilise `!roll XdY`, où X est le nombre de dés et Y le nombre de faces.")
         log_command(ctx, f"{rolls} ({total})")
+
+    @roll.error
+    async def roll_error(ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Vous devez spécifier le format du dé, comme `1d20`.")
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send("Format incorrect. Utilisez le format `XdY` (ex : 1d20).")
 
 
 async def setup(bot):

@@ -22,6 +22,7 @@ async def load_all_cogs(bot):
             logging.info(f"Cog {filename} loaded!")
 
 
-def log_command(ctx, output):
+def log_command(ctx, output=None):
+    extra = f" -- {output}" if output else ""
     logging.info(
-        f"#{ctx.channel} @{ctx.author}: {ctx.message.content} -- {output}")
+        f"#{ctx.channel} @{ctx.author}: {ctx.message.content}{extra}")
